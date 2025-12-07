@@ -1,25 +1,38 @@
 export default async function handler(request, response) {
   const { city } = request.query;
-
-  // 👇 다시 보안 금고에서 키를 가져오도록 수정
+  
+  // Vercel 환경 변수 사용 (만약 환경변수 설정이 아직 안됐다면 여기에 직접 키를 넣으세요)
   const apiKey = process.env.WEATHER_API_KEY;
 
-  // 키가 없을 경우 에러 처리
   if (!apiKey) {
-    return response.status(500).json({ error: "서버 설정 오류: API Key가 없습니다." });
+    return response.status(500).json({ error: "API Key 설정 오류" });
   }
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  // 1. 현재 날씨 URL
+  const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  // 2. 5일 예보 URL
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
 
   try {
-    const weatherRes = await fetch(url);
-    const data = await weatherRes.json();
+    // 두 개의 API 요청을 동시에 보냄 (속도 향상)
+    const [currentRes, forecastRes] = await Promise.all([
+      fetch(currentUrl),
+      fetch(forecastUrl)
+    ]);
 
-    if (!weatherRes.ok) {
-      return response.status(weatherRes.status).json({ error: data.message });
+    const currentData = await currentRes.json();
+    const forecastData = await forecastRes.json();
+
+    if (!currentRes.ok || !forecastRes.ok) {
+      return response.status(404).json({ error: currentData.message || forecastData.message });
     }
 
-    response.status(200).json(data);
+    // 두 데이터를 합쳐서 프론트엔드로 보냄
+    response.status(200).json({
+      current: currentData,
+      forecast: forecastData
+    });
+
   } catch (error) {
     response.status(500).json({ error: "서버 내부 오류 발생" });
   }

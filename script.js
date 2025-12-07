@@ -1,48 +1,66 @@
-// 1. 배경색 변경 함수 (날씨 상태 코드에 따라 분기)
+// 배경 변경 함수
 function updateBackground(weatherMain) {
     const body = document.body;
-    body.className = ''; // 기존 클래스 초기화
-
+    body.className = ''; 
     switch (weatherMain) {
-        case 'Clear':
-            body.classList.add('sunny');
-            break;
-        case 'Clouds':
-        case 'Mist':
-        case 'Haze':
-        case 'Fog':
-            body.classList.add('cloudy');
-            break;
-        case 'Rain':
-        case 'Drizzle':
-        case 'Thunderstorm':
-            body.classList.add('rainy');
-            break;
-        case 'Snow':
-            body.classList.add('snowy');
-            break;
-        default:
-            body.classList.add('sunny'); // 기본값
+        case 'Clear': body.classList.add('sunny'); break;
+        case 'Clouds': case 'Mist': case 'Haze': case 'Fog': body.classList.add('cloudy'); break;
+        case 'Rain': case 'Drizzle': case 'Thunderstorm': body.classList.add('rainy'); break;
+        case 'Snow': body.classList.add('snowy'); break;
+        default: body.classList.add('sunny');
     }
 }
 
-// 2. 옷차림 추천 함수 (온도별 분기)
+// 옷차림 추천 함수
 function getClothingRecommendation(temp) {
-    if (temp >= 28) return "민소매, 반팔, 반바지 (너무 더워요! 🥵)";
-    if (temp >= 23) return "반팔, 얇은 셔츠, 반바지, 면바지";
-    if (temp >= 20) return "얇은 가디건, 긴팔, 청바지";
+    if (temp >= 28) return "민소매, 반팔, 반바지 (폭염 주의! 🥵)";
+    if (temp >= 23) return "반팔, 얇은 셔츠, 반바지";
+    if (temp >= 20) return "얇은 가디건, 긴팔, 면바지";
     if (temp >= 17) return "얇은 니트, 맨투맨, 가디건";
-    if (temp >= 12) return "자켓, 가디건, 야상, 스타킹";
-    if (temp >= 9) return "트렌치코트, 야상, 점퍼";
+    if (temp >= 12) return "자켓, 야상, 스타킹, 청바지";
+    if (temp >= 9) return "트렌치코트, 점퍼, 기모바지";
     if (temp >= 5) return "코트, 가죽자켓, 히트텍";
-    return "패딩, 두꺼운 코트, 목도리 (완전 무장 하세요! 🥶)";
+    return "패딩, 목도리, 장갑 (한파 주의! 🥶)";
 }
 
-// 3. 날씨 가져오기 메인 함수
+// 🌟 최근 검색어 저장 및 화면 표시 함수
+function handleRecentSearch(city) {
+    let history = JSON.parse(localStorage.getItem('weatherHistory')) || [];
+    
+    // 중복 제거 및 최신 검색어를 맨 앞으로
+    history = history.filter(item => item.toLowerCase() !== city.toLowerCase());
+    history.unshift(city);
+    
+    // 최대 5개까지만 유지
+    if (history.length > 5) history.pop();
+    
+    localStorage.setItem('weatherHistory', JSON.stringify(history));
+    renderRecentSearches();
+}
+
+function renderRecentSearches() {
+    const history = JSON.parse(localStorage.getItem('weatherHistory')) || [];
+    const container = document.getElementById('recentSearchContainer');
+    container.innerHTML = ''; // 초기화
+
+    history.forEach(city => {
+        const btn = document.createElement('button');
+        btn.textContent = city;
+        btn.className = 'recent-btn';
+        btn.onclick = () => {
+            document.getElementById('cityInput').value = city;
+            getWeather();
+        };
+        container.appendChild(btn);
+    });
+}
+
+// 🌟 메인 날씨 가져오기 함수
 async function getWeather() {
     const cityInput = document.getElementById('cityInput');
     const weatherResult = document.getElementById('weatherResult');
     const errorMessage = document.getElementById('errorMessage');
+    const forecastList = document.getElementById('forecastList');
     
     const city = cityInput.value;
 
@@ -52,46 +70,65 @@ async function getWeather() {
     }
 
     try {
-        // Vercel 서버리스 함수 호출 (보안 유지)
         const url = `/api/weather?city=${city}`;
         const response = await fetch(url);
         const data = await response.json();
 
         if (!response.ok) throw new Error(data.error || "도시를 찾을 수 없습니다.");
 
-        // 화면 표시 시작
+        // 성공 시 화면 표시
         errorMessage.classList.add('hidden');
         weatherResult.classList.remove('hidden');
 
-        // 데이터 바인딩
-        document.getElementById('cityName').innerText = data.name;
-        document.getElementById('temperature').innerText = `${Math.round(data.main.temp)}°C`;
-        document.getElementById('description').innerText = data.weather[0].description;
-        document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-        document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
+        // 1. 현재 날씨 처리
+        const current = data.current;
+        document.getElementById('cityName').innerText = current.name;
+        document.getElementById('temperature').innerText = `${Math.round(current.main.temp)}°C`;
+        document.getElementById('description').innerText = current.weather[0].description;
+        document.getElementById('humidity').innerText = `${current.main.humidity}%`;
+        document.getElementById('windSpeed').innerText = `${current.wind.speed} m/s`;
+        document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`;
+        
+        updateBackground(current.weather[0].main);
+        document.getElementById('clothingText').innerText = getClothingRecommendation(current.main.temp);
 
-        // 아이콘 설정
-        const iconCode = data.weather[0].icon;
-        document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+        // 2. 5일 예보 처리 (필터링: 매일 낮 12시 데이터만 사용)
+        forecastList.innerHTML = ''; // 초기화
+        const dailyForecasts = data.forecast.list.filter(item => item.dt_txt.includes("12:00:00"));
+        
+        // 반복문 사용 (과제 요구사항)
+        dailyForecasts.forEach(item => {
+            const date = new Date(item.dt * 1000);
+            const dayName = date.toLocaleDateString('ko-KR', { weekday: 'short' }); // 월, 화...
+            const temp = Math.round(item.main.temp);
+            const icon = item.weather[0].icon;
 
-        // ✨ 배경 변경 실행
-        updateBackground(data.weather[0].main);
+            const card = `
+                <div class="forecast-item">
+                    <span class="forecast-date">${dayName}</span>
+                    <img src="https://openweathermap.org/img/wn/${icon}.png" alt="icon">
+                    <span class="forecast-temp">${temp}°C</span>
+                </div>
+            `;
+            forecastList.innerHTML += card;
+        });
 
-        // ✨ 옷차림 추천 실행
-        const temp = data.main.temp;
-        document.getElementById('clothingText').innerText = getClothingRecommendation(temp);
+        // 3. 최근 검색어 저장
+        handleRecentSearch(city);
 
     } catch (error) {
         console.error(error);
         weatherResult.classList.add('hidden');
         errorMessage.classList.remove('hidden');
         errorMessage.innerText = `❌ ${error.message}`;
-        document.body.className = 'cloudy'; // 에러 시 배경 회색으로
     }
 }
 
-// 이벤트 연결
-document.getElementById('cityInput').addEventListener('keypress', function (e) {
+// 초기화: 페이지 로드 시 최근 검색어 버튼 표시
+document.addEventListener('DOMContentLoaded', renderRecentSearches);
+
+// 이벤트 리스너
+document.getElementById('cityInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') getWeather();
 });
 document.getElementById('searchBtn').addEventListener('click', getWeather);
