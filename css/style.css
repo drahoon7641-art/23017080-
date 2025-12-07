@@ -54,12 +54,15 @@ button:hover { background: #0056b3; }
 .clothing-box h3 { margin: 0 0 5px 0; font-size: 1rem; color: #007bff; }
 .clothing-box p { margin: 0; font-size: 0.95rem; line-height: 1.4; }
 
-/* 🌟 7. 날씨별 배경 테마 (JS에서 제어) */
+/* 🌟 7. 날씨별 배경 테마 (강제 적용) */
 /* 맑음 */
-body.sunny { background: linear-gradient(120deg, #f6d365, #fda085); }
-/* 흐림/안개 */
-body.cloudy { background: linear-gradient(120deg, #bdc3c7, #2c3e50); }
+body.sunny { background: linear-gradient(120deg, #f6d365, #fda085) !important; }
+
+/* 흐림/안개/구름 */
+body.cloudy { background: linear-gradient(120deg, #bdc3c7, #2c3e50) !important; }
+
 /* 비/뇌우 */
-body.rainy { background: linear-gradient(120deg, #4b6cb7, #182848); }
+body.rainy { background: linear-gradient(120deg, #4b6cb7, #182848) !important; }
+
 /* 눈 */
-body.snowy { background: linear-gradient(120deg, #e6dada, #274046); }
+body.snowy { background: linear-gradient(120deg, #e6dada, #274046) !important; }
