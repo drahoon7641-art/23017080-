@@ -10,12 +10,13 @@
 <body>
     <div class="card">
         <div class="search-bar">
-            <input type="text" id="cityInput" placeholder="도시 이름을 입력하세요 (예: Seoul)">
+            <input type="text" id="cityInput" placeholder="도시 이름 (예: Seoul)">
             <button id="searchBtn">🔍</button>
         </div>
 
         <div id="weatherResult" class="weather-info hidden">
-            <h2 id="cityName">City Name</h2>
+            <h2 id="cityName">도시 이름</h2>
+            
             <div class="weather-main">
                 <img id="weatherIcon" src="" alt="날씨 아이콘">
                 <h1 id="temperature">0°C</h1>
@@ -31,6 +32,11 @@
                     <span>💨 풍속</span>
                     <strong id="windSpeed">0 m/s</strong>
                 </div>
+            </div>
+
+            <div id="clothingRec" class="clothing-box">
+                <h3>👕 오늘의 추천 옷차림</h3>
+                <p id="clothingText">데이터를 불러오는 중...</p>
             </div>
         </div>
 

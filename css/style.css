@@ -1,97 +1,59 @@
-/* 1. 전체 배치 및 배경 */
+/* 1. 기본 설정 및 애니메이션 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background: linear-gradient(135deg, #74ebd5, #ACB6E5); /* 산뜻한 그라데이션 */
+    /* 기본 배경 (맑음) */
+    background: linear-gradient(120deg, #89f7fe, #66a6ff);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    transition: background 1s ease; /* 배경색이 부드럽게 바뀌도록 설정 */
+    color: #333;
 }
 
-/* 2. 날씨 카드 디자인 */
+/* 2. 카드 디자인 */
 .card {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     width: 90%;
-    max-width: 400px; /* PC에서는 너무 안 커지게 */
+    max-width: 400px;
     padding: 2rem;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     text-align: center;
 }
 
-/* 3. 검색창 디자인 */
-.search-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+/* 3. 검색창 */
+.search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 10px; outline: none; font-size: 1rem; }
+input:focus { border-color: #74ebd5; }
+button { background: #007bff; color: white; border: none; padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+button:hover { background: #0056b3; }
 
-input {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    outline: none;
-    font-size: 1rem;
-}
+/* 4. 날씨 정보 */
+.weather-main { margin: 20px 0; }
+#temperature { font-size: 4rem; margin: 10px 0; color: #333; }
+#description { font-size: 1.2rem; color: #555; text-transform: capitalize; }
+.weather-details { display: flex; justify-content: space-around; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+.detail-item { display: flex; flex-direction: column; gap: 5px; font-size: 0.9rem; color: #555; }
+.detail-item strong { font-size: 1.2rem; color: #333; }
 
-input:focus {
-    border-color: #74ebd5;
-}
+/* 5. 유틸리티 */
+.hidden { display: none; }
+.error { color: red; margin-top: 10px; font-weight: bold; }
 
-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 12px 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: 0.3s;
-}
-
-button:hover {
-    background: #0056b3;
-}
-
-/* 4. 날씨 정보 디자인 */
-.weather-main {
-    margin: 20px 0;
-}
-
-#temperature {
-    font-size: 4rem;
-    margin: 10px 0;
-    color: #333;
-}
-
-#description {
-    font-size: 1.2rem;
-    color: #666;
-    text-transform: capitalize;
-}
-
-/* 5. 상세 정보 (습도, 풍속) 그리드 */
-.weather-details {
-    display: flex;
-    justify-content: space-around;
+/* 🌟 6. 확장 기능: 옷차림 박스 스타일 */
+.clothing-box {
     margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+    padding: 15px;
+    background-color: #f1f3f5;
+    border-radius: 10px;
+    border-left: 5px solid #007bff;
+    text-align: left;
 }
+.clothing-box h3 { margin: 0 0 5px 0; font-size: 1rem; color: #007bff; }
+.clothing-box p { margin: 0; font-size: 0.95rem; line-height: 1.4; }
 
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.detail-item strong {
-    font-size: 1.2rem;
-    color: #333;
-}
-
-/*
+/* 🌟 7. 날씨별 배경 테마 (JS에서 제어) */
+/* 맑음 */
+body.
