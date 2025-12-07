@@ -2,7 +2,7 @@ export default async function handler(request, response) {
   const { city } = request.query;
   
   // Vercel 환경 변수 사용 (만약 환경변수 설정이 아직 안됐다면 여기에 직접 키를 넣으세요)
-  const apiKey = process.env.WEATHER_API_KEY;
+  const apiKey = "2e8475d119533fc7fe12c476bfddf4e3";
 
   if (!apiKey) {
     return response.status(500).json({ error: "API Key 설정 오류" });
