@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>테스트</title>
-    <style>
-        body { background-color: lightgreen; } /* 이번엔 연두색! */
-    </style>
+    <title>나만의 날씨 예보</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>테스트 페이지</h1>
-    
-    <script>
-        alert("이제 진짜 됩니다!"); 
-    </script>
+    <div class="container">
+        <h1>🌤️ 날씨 검색</h1>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="도시 이름 (예: Seoul)">
+            <button id="searchBtn">검색</button>
+        </div>
+
+        <div id="weatherResult">
+            <p>도시를 검색해보세요.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
