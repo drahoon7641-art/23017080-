@@ -68,4 +68,30 @@ async function getWeather() {
         document.getElementById('temperature').innerText = `${Math.round(data.main.temp)}°C`;
         document.getElementById('description').innerText = data.weather[0].description;
         document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-        document.getElementById('windSpeed
+        document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
+
+        // 아이콘 설정
+        const iconCode = data.weather[0].icon;
+        document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+        // ✨ 배경 변경 실행
+        updateBackground(data.weather[0].main);
+
+        // ✨ 옷차림 추천 실행
+        const temp = data.main.temp;
+        document.getElementById('clothingText').innerText = getClothingRecommendation(temp);
+
+    } catch (error) {
+        console.error(error);
+        weatherResult.classList.add('hidden');
+        errorMessage.classList.remove('hidden');
+        errorMessage.innerText = `❌ ${error.message}`;
+        document.body.className = 'cloudy'; // 에러 시 배경 회색으로
+    }
+}
+
+// 이벤트 연결
+document.getElementById('cityInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') getWeather();
+});
+document.getElementById('searchBtn').addEventListener('click', getWeather);

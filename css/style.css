@@ -56,4 +56,10 @@ button:hover { background: #0056b3; }
 
 /* 🌟 7. 날씨별 배경 테마 (JS에서 제어) */
 /* 맑음 */
-body.
+body.sunny { background: linear-gradient(120deg, #f6d365, #fda085); }
+/* 흐림/안개 */
+body.cloudy { background: linear-gradient(120deg, #bdc3c7, #2c3e50); }
+/* 비/뇌우 */
+body.rainy { background: linear-gradient(120deg, #4b6cb7, #182848); }
+/* 눈 */
+body.snowy { background: linear-gradient(120deg, #e6dada, #274046); }
