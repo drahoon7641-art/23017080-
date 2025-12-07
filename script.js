@@ -1,4 +1,4 @@
-const API_KEY = "2e8475d119533fc7fe12c476bfddf4e3"; // 여기에 본인 키 붙여넣기!
+// API Key 변수 삭제됨! (보안 처리 완료)
 
 async function getWeather() {
     const city = document.getElementById('cityInput').value;
@@ -10,16 +10,16 @@ async function getWeather() {
     }
 
     try {
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+        // 변경된 부분: 외부 API가 아니라 '내 Vercel 서버'로 요청
+        const url = `/api/weather?city=${city}`;
         
         const response = await fetch(url);
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error("도시를 찾을 수 없습니다.");
+            throw new Error(data.error || "도시를 찾을 수 없습니다.");
         }
 
-        // 화면에 결과 보여주기
         resultDiv.innerHTML = `
             <h2>${data.name}</h2>
             <p>온도: <strong>${data.main.temp}°C</strong></p>
@@ -32,5 +32,4 @@ async function getWeather() {
     }
 }
 
-// 버튼 클릭 시 실행
 document.getElementById('searchBtn').addEventListener('click', getWeather);
