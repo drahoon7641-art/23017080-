@@ -1,6 +1,11 @@
 export default async function handler(request, response) {
   const { city } = request.query;
-  const apiKey = process.env.WEATHER_API_KEY;
+
+  // 👇 기존 코드는 주석(//) 처리하고, 아래에 본인 키를 직접 문자열로 넣으세요.
+  // const apiKey = process.env.WEATHER_API_KEY; 
+  const apiKey = "2e8475d119533fc7fe12c476bfddf4e3"; 
+
+  // ---------------------------------------------------------
 
   if (!apiKey) {
     return response.status(500).json({ error: "API Key 설정 오류" });
