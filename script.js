@@ -1,4 +1,4 @@
-const API_KEY = "YOUR_API_KEY_HERE"; // 여기에 본인 키 붙여넣기!
+const API_KEY = "2e8475d119533fc7fe12c476bfddf4e3"; // 여기에 본인 키 붙여넣기!
 
 async function getWeather() {
     const city = document.getElementById('cityInput').value;
