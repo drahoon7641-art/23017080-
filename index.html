@@ -5,19 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>나만의 날씨 예보</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>🌤️ 날씨 검색</h1>
-        
-        <div class="search-box">
-            <input type="text" id="cityInput" placeholder="도시 이름 (예: Seoul)">
-            <button id="searchBtn">검색</button>
+    <div class="card">
+        <div class="search-bar">
+            <input type="text" id="cityInput" placeholder="도시 이름을 입력하세요 (예: Seoul)">
+            <button id="searchBtn">🔍</button>
         </div>
 
-        <div id="weatherResult">
-            <p>도시를 검색해보세요.</p>
+        <div id="weatherResult" class="weather-info hidden">
+            <h2 id="cityName">City Name</h2>
+            <div class="weather-main">
+                <img id="weatherIcon" src="" alt="날씨 아이콘">
+                <h1 id="temperature">0°C</h1>
+                <p id="description">날씨 상태</p>
+            </div>
+            
+            <div class="weather-details">
+                <div class="detail-item">
+                    <span>💧 습도</span>
+                    <strong id="humidity">0%</strong>
+                </div>
+                <div class="detail-item">
+                    <span>💨 풍속</span>
+                    <strong id="windSpeed">0 m/s</strong>
+                </div>
+            </div>
         </div>
+
+        <div id="errorMessage" class="error hidden"></div>
     </div>
 
     <script src="script.js"></script>

@@ -1,38 +1,97 @@
+/* 1. 전체 배치 및 배경 */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f8ff;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5); /* 산뜻한 그라데이션 */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
 }
 
-.container {
+/* 2. 날씨 카드 디자인 */
+.card {
     background: white;
+    width: 90%;
+    max-width: 400px; /* PC에서는 너무 안 커지게 */
     padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     text-align: center;
-    width: 300px;
+}
+
+/* 3. 검색창 디자인 */
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 60%;
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1rem;
+}
+
+input:focus {
+    border-color: #74ebd5;
 }
 
 button {
-    padding: 10px;
-    background-color: #007bff;
+    background: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 12px 15px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.3s;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background: #0056b3;
 }
+
+/* 4. 날씨 정보 디자인 */
+.weather-main {
+    margin: 20px 0;
+}
+
+#temperature {
+    font-size: 4rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+#description {
+    font-size: 1.2rem;
+    color: #666;
+    text-transform: capitalize;
+}
+
+/* 5. 상세 정보 (습도, 풍속) 그리드 */
+.weather-details {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.detail-item strong {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/*

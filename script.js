@@ -1,8 +1,9 @@
-// API Key 변수 삭제됨! (보안 처리 완료)
-
 async function getWeather() {
-    const city = document.getElementById('cityInput').value;
-    const resultDiv = document.getElementById('weatherResult');
+    const cityInput = document.getElementById('cityInput');
+    const weatherResult = document.getElementById('weatherResult');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    const city = cityInput.value;
 
     if (!city) {
         alert("도시 이름을 입력해주세요!");
@@ -10,9 +11,8 @@ async function getWeather() {
     }
 
     try {
-        // 변경된 부분: 외부 API가 아니라 '내 Vercel 서버'로 요청
+        // Vercel 서버(Serverless Function)로 요청
         const url = `/api/weather?city=${city}`;
-        
         const response = await fetch(url);
         const data = await response.json();
 
@@ -20,16 +20,37 @@ async function getWeather() {
             throw new Error(data.error || "도시를 찾을 수 없습니다.");
         }
 
-        resultDiv.innerHTML = `
-            <h2>${data.name}</h2>
-            <p>온도: <strong>${data.main.temp}°C</strong></p>
-            <p>날씨: ${data.weather[0].description}</p>
-        `;
+        // 성공 시 에러 메시지 숨기고 결과 보여주기
+        errorMessage.classList.add('hidden');
+        weatherResult.classList.remove('hidden');
+
+        // 1. 도시 이름 및 날씨 상태
+        document.getElementById('cityName').innerText = data.name;
+        document.getElementById('temperature').innerText = `${Math.round(data.main.temp)}°C`;
+        document.getElementById('description').innerText = data.weather[0].description;
+
+        // 2. 아이콘 설정 (OpenWeatherMap 공식 아이콘 주소)
+        const iconCode = data.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+        document.getElementById('weatherIcon').src = iconUrl;
+
+        // 3. 상세 정보 (습도, 풍속) - 과제 필수 항목
+        document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+        document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
 
     } catch (error) {
         console.error(error);
-        resultDiv.innerHTML = `<p style="color:red;">❌ ${error.message}</p>`;
+        weatherResult.classList.add('hidden');
+        errorMessage.classList.remove('hidden');
+        errorMessage.innerText = `❌ ${error.message}`;
     }
 }
+
+// 엔터키 눌러도 검색되게 하기 (UX 개선)
+document.getElementById('cityInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        getWeather();
+    }
+});
 
 document.getElementById('searchBtn').addEventListener('click', getWeather);
